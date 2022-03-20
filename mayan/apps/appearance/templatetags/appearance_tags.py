@@ -129,33 +129,43 @@ def appearance_get_user_theme_stylesheet(user):
 @register.simple_tag
 def get_font_link():
     #obj = Theme.objects.all().order_by('id')[:1][0]
-    thm = UserThemeSetting.objects.filter(user_id=1)
+    thm = UserThemeSetting.objects.filter(user_id=1)  
     item_theme_setting = thm.values()
-    tt =  item_theme_setting[0]
-    theme_id_ = tt['theme_id']
-    stl = Theme.objects.filter(id=theme_id_)
-    styy = stl.values()
-    stmp = styy[0]
-    if stmp['font_other']:
-        fontname = stmp['font_other']
-    else:
-        fontname = stmp['font']
+    # tt =  item_theme_setting[0]
+    try:
+        tt =  item_theme_setting[0]
+        theme_id_ = tt['theme_id']
+        stl = Theme.objects.filter(id=theme_id_)
+        styy = stl.values()
+        stmp = styy[0]
+        if stmp['font_other']:
+            fontname = stmp['font_other']
+        else:
+            fontname = stmp['font']
     
-    fontRaw = fontname
-    fontLink = fontRaw.replace(" ", "+")
-    return stmp['font']
+        fontRaw = fontname
+        fontLink = fontRaw.replace(" ", "+")
+        return stmp['font']
+    except :
+        return ''
+    
 
 @register.simple_tag
 def appearance_get_user_theme_script():
     obj = UserThemeSetting.objects.filter(user_id=1)
     item_theme_setting = obj.values()
-    tt =  item_theme_setting[0]
-    theme_id_ = tt['theme_id']
-    stl = Theme.objects.filter(id=theme_id_)
-    styy = stl.values()
-    stmp = styy[0]
-    context = str(stmp['font_size_header']) + '|' + str(stmp['font_size_menu']) +'|'+ str(stmp['font_size_content_title'])
-    return context
+    try:
+        tt =  item_theme_setting[0]
+        theme_id_ = tt['theme_id']
+        stl = Theme.objects.filter(id=theme_id_)
+        styy = stl.values()
+        stmp = styy[0]
+        context = str(stmp['font_size_header']) + '|' + str(stmp['font_size_menu']) +'|'+ str(stmp['font_size_content_title'])
+        return context
+    except :
+        context = '20'+ '|' + '20' +'|'+ '20'
+        return context
+    
 
 @register.simple_tag
 def appearance_icon_render(icon, enable_shadow=False):
